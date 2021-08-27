@@ -26,6 +26,7 @@ function sortResults($res)
     if($isDate !== false)
     {
       $shipDate = $isDate;
+      updateExpectedDate($row["orderid"],$shipDate);
     }else {
       $shipDate = '';//$row["shipdate_expected"];
     }
