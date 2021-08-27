@@ -21,6 +21,19 @@ class order {
 
   }
 };
+
+class orderGroup {
+  public $groupName;
+  public $groupOrders = array();
+
+  public function __construct($groupName, $groupOrders){
+    $this->groupName = $groupName;
+    $this->groupOrders = $groupOrders;
+
+  }
+};
+
+$report = array();
 $candy = array();
 $calls = array();
 $referred = array();
@@ -29,6 +42,7 @@ $misc = array();
 
 function sortResults($res)
 {
+  global $report;
   global $candy;
   global $calls;
   global $referred;
@@ -63,6 +77,13 @@ function sortResults($res)
       array_push($misc,$z);
     }
   }
+
+  array_push($report,new orderGroup("Candy",$candy));
+  array_push($report,new orderGroup("Calls",$calls));
+  array_push($report,new orderGroup("Referrals",$referred));
+  array_push($report,new orderGroup("Signatures",$signature));
+  array_push($report,new orderGroup("Misc",$misc));
+
 }
 
 
@@ -74,6 +95,7 @@ $dbname = "sweetwater_test";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
@@ -82,66 +104,22 @@ $sql = "SELECT * FROM sweetwater_test";
 $result = $conn->query($sql);
 sortResults($result);
 
-echo "<table><tr>Candy - ". count($candy) ." Records</tr><tr><th>orderid</th><th>comments</th><th>shipdate_expected</th></tr>";
-if (count($candy) > 0) {
-  $len = count($candy);
-  foreach ($candy as $c) {
-    $order = json_decode(json_encode($c),true);
-    echo "<tr><td>".$order["orderid"]."</td><td>".$order["comments"]."</td><td>".$order["shipdate_expected"]."</td></tr>";
-  }
-  echo "</table>";
-} else {
-  echo "<tr><td>0 results</td></tr></table>";
-}
-
-echo "<table><tr>Calls - ". count($calls) ." Records</tr><tr><th>orderid</th><th>comments</th><th>shipdate_expected</th></tr>";
-if (count($calls) > 0) {
-  $len = count($calls);
-  foreach ($calls as $c) {
-    $order = json_decode(json_encode($c),true);
-    echo "<tr><td>".$order["orderid"]."</td><td>".$order["comments"]."</td><td>".$order["shipdate_expected"]."</td></tr>"; 
-  }
-  echo "</table>";
-} else {
-  echo "<tr><td>0 results</td></tr></table>";
-}
-
-echo "<table><tr>Referred - ". count($referred) ." Records</tr><tr><th>orderid</th><th>comments</th><th>shipdate_expected</th></tr>";
-if (count($referred) > 0) {
-  $len = count($referred);
-  foreach ($referred as $c) {
-    $order = json_decode(json_encode($c),true);
-    echo "<tr><td>".$order["orderid"]."</td><td>".$order["comments"]."</td><td>".$order["shipdate_expected"]."</td></tr>";
+foreach ($report as $r) {
+  $orderList = json_decode(json_encode($r->{'groupOrders'},true));
+  $numOrders = count($orderList);
+  echo "<table><tr>".$r->{"groupName"}." - ". $numOrders ." Records</tr><tr><th>orderid</th><th>comments</th><th>shipdate_expected</th></tr>";
+  if ($numOrders > 0) {
     
+    foreach ($orderList as $o) {
+      $order = json_decode(json_encode($o),true);
+      echo "<tr><td>".$order["orderid"]."</td><td>".$order["comments"]."</td><td>".$order["shipdate_expected"]."</td></tr>";
+    }
+    echo "</table>";
+  } else {
+    echo "<tr><td>0 results</td></tr></table>";
   }
-  echo "</table>";
-} else {
-  echo "<tr><td>0 results</td></tr></table>";
 }
 
-echo "<table><tr>Signature - ". count($signature) ." Records</tr><tr><th>orderid</th><th>comments</th><th>shipdate_expected</th></tr>";
-if (count($signature) > 0) {
-  $len = count($signature);
-  foreach ($signature as $c) {
-    $order = json_decode(json_encode($c),true);
-    echo "<tr><td>".$order["orderid"]."</td><td>".$order["comments"]."</td><td>".$order["shipdate_expected"]."</td></tr>"; 
-  }
-  echo "</table>";
-} else {
-  echo "<tr><td>0 results</td></tr></table>";
-}
-
-echo "<table><tr>Misc - ". count($misc) ." Records</tr><tr><th>orderid</th><th>comments</th><th>shipdate_expected</th></tr>";
-if (count($misc) > 0) {
-  $len = count($misc);
-  foreach ($misc as $c) {
-    $order = json_decode(json_encode($c),true);
-    echo "<tr><td>".$order["orderid"]."</td><td>".$order["comments"]."</td><td>".$order["shipdate_expected"]."</td></tr>";  
-  }
-  echo "</table>";
-} else {
-  echo "<tr><td>0 results</td></tr></table>";
-}
 $conn->close();
 
   
