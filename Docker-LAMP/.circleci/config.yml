@@ -1,0 +1,17 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: circleci/node:10.15.3-browsers
+
+        steps:
+            
+            - add_ssh_keys:
+                fingerprints:
+                  - "76:93:24:8d:1d:8f:7a:6c:f3:fb:e4:71:68:3f:89:a7"
+            - run:
+                name: add dokcer server to known server
+                command:  ssh-keyscan -H 18.232.109.109 >> ~/.ssh/known_hosts
+            - run: 
+                command: ssh ubuntu@18.232.109.109 'cd /home/ && ls -l';
+                   
