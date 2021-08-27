@@ -37,6 +37,22 @@ class orderGroup {
   }
 };
 
+/**
+ * Find Date in a String
+ *
+ * @author   Etienne Tremel
+ * *
+ * *
+ * @modifiedBy This Guy --> fixed a 'non-numeric' bug/issue on line 154 and changed the return value;
+ * *
+ * *
+ * @license  http://creativecommons.org/licenses/by/3.0/ CC by 3.0
+ * @link     http://www.etiennetremel.net
+ * @version  0.2.0
+ *
+ * @param string  find_date( ' some text 01/01/2012 some text' ) or find_date( ' some text October 5th 86 some text' )
+ * @return mixed  false if no date found else array: array( 'day' => 01, 'month' => 01, 'year' => 2012 )
+ */
 function find_date( $string ) {
   $shortenize = function( $string ) {
     return substr( $string, 0, 3 );
