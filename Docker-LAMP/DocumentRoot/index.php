@@ -28,7 +28,7 @@ sortResults($result);
 foreach ($report as $r) {
   $orderList = json_decode(json_encode($r->{'groupOrders'},true));
   $numOrders = count($orderList);
-  echo "<hr><div class='orderGroup'><table><tr>w".$r->{"groupName"}." - ". $numOrders ." Records</tr><tr><th>orderid</th><th>comments</th><th>shipdate_expected</th></tr>";
+  echo "<hr><div class='orderGroup'><table><tr>".$r->{"groupName"}." - ". $numOrders ." Records</tr><tr><th>orderid</th><th>comments</th><th>shipdate_expected</th></tr>";
   if ($numOrders > 0) {
     
     foreach ($orderList as $o) {
