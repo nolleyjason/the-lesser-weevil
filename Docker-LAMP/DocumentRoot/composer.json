@@ -1,0 +1,12 @@
+{
+    "name": "the/lesserweevil",
+    "description": "",
+    "autoload": {
+        "psr-4": {
+            "App\\": "DocumentRoot/"
+        }
+    },
+    "require": {
+        "symfony/routing": "^5.3"
+    }
+}
