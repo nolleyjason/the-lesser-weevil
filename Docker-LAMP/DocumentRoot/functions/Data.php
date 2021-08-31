@@ -26,7 +26,7 @@ function getOrders()
     die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SELECT * FROM sweetwater_test";
+    $sql = "SELECT * FROM sweetwater_test ORDER BY orderid ASC";
     $result = $conn->query($sql);
 
     closeDBConn($conn);
