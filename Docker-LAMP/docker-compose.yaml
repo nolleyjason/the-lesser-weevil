@@ -3,7 +3,7 @@ services:
     www:
         image: amarsingh3d/apache2.4-php7.2
         ports: 
-            - "81:80"
+            - "80:80"
         volumes:
             - ./DocumentRoot:/var/www/html/
         links:
